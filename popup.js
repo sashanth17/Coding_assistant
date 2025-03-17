@@ -18,19 +18,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         try {
             const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateText?key=${API_KEY}`,
+                `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`,
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Give a helpful hint for a ${difficulty} coding problem.` }] }],
+                        contents: [{ role: "user", parts: [{ text: `Give a helpful hint for a ${difficulty} coding problem.` }] }]
                     }),
                 }
             );
 
-            const data = await response.json();
+            console.log("Response status:", response.status);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
 
-            // Correct way to extract hint from the response
+            const data = await response.json();
+            console.log("Parsed Response:", data);
+            // Extract hint from response
             const hint = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "No hint available.";
             hintDisplay.textContent = hint;
 
