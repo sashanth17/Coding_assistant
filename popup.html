@@ -1,7 +1,23 @@
-<html>
-  <body>
-    <h1>Hello Extensions</h1>
-    <p>currently under development</p>
-    <script src="popup.js"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>AI Code Hints</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h2>Code Hint AI</h2>
+  <p id="timer">Time Spent: 0 mins</p>
+  
+  <label for="difficulty">Select Difficulty:</label>
+  <select id="difficulty">
+    <option value="easy">Easy</option>
+    <option value="medium">Medium</option>
+    <option value="hard">Hard</option>
+  </select>
+
+  <button id="getHint">Get AI Hint</button>
+  <p id="hint"></p>
+
+  <script src="popup.js"></script>
+</body>
 </html>

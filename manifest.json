@@ -1,10 +1,15 @@
 {
-  "name": "smart coding assistant",
-  "description": "Base Level Extension",
-  "version": "1.0",
   "manifest_version": 3,
+  "name": "Code Hint AI",
+  "version": "1.0",
+  "description": "Provides AI-powered coding hints based on problem level.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["https://generativelanguage.googleapis.com/"],
   "action": {
     "default_popup": "popup.html",
-    "default_icon": "image.png"
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js"
   }
 }
