@@ -14,27 +14,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         hintDisplay.textContent = "Fetching hint...";
 
         const difficulty = difficultySelect.value;
-        const API_KEY = "AIzaSyCgwnIuHmWlUoip9-dmiCaEEMXsTFux3RI"; // Replace with your actual key
+        const API_KEY = "AIzaSyCgwnIuHmWlUoip9-dmiCaEEMXsTFux3RI"; // Replace with your actual API key
 
         try {
             const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateText?key=${API_KEY}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateText?key=${API_KEY}`,
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        prompt: { text: `Give a helpful hint for a ${difficulty} coding problem.` },
-                        max_tokens: 50,
+                        contents: [{ parts: [{ text: `Give a helpful hint for a ${difficulty} coding problem.` }] }],
                     }),
                 }
             );
 
             const data = await response.json();
-            if (data.candidates && data.candidates.length > 0) {
-                hintDisplay.textContent = data.candidates[0].output.trim();
-            } else {
-                hintDisplay.textContent = "No hint available.";
-            }
+
+            // Correct way to extract hint from the response
+            const hint = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "No hint available.";
+            hintDisplay.textContent = hint;
+
         } catch (error) {
             console.error("Error fetching hint:", error);
             hintDisplay.textContent = "Error fetching hint.";
