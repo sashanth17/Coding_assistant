@@ -1,23 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>AI Code Hints</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Hint AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            width: 300px;
+            padding: 10px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 5px;
+            width: 100%;
+            cursor: pointer;
+        }
+        select, p {
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-  <h2>Code Hint AI</h2>
-  <p id="timer">Time Spent: 0 mins</p>
-  
-  <label for="difficulty">Select Difficulty:</label>
-  <select id="difficulty">
-    <option value="easy">Easy</option>
-    <option value="medium">Medium</option>
-    <option value="hard">Hard</option>
-  </select>
+    <h3>Code Hint AI</h3>
+    <p id="timer">Time Spent: 0 mins</p>
+    
+    <label for="difficulty">Select Difficulty:</label>
+    <select id="difficulty">
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+    </select>
 
-  <button id="getHint">Get AI Hint</button>
-  <p id="hint"></p>
+    <button id="getHint">Get AI Hint</button>
+    <p id="hint"></p>
 
-  <script src="popup.js"></script>
+    <button id="getExplanation">Get Detailed Explanation</button>
+    <p id="explanation"></p>
+
+    <script src="popup.js"></script>
 </body>
 </html>

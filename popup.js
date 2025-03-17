@@ -2,19 +2,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     const timerElement = document.getElementById("timer");
     const difficultySelect = document.getElementById("difficulty");
     const hintButton = document.getElementById("getHint");
+    const explanationButton = document.getElementById("getExplanation");
     const hintDisplay = document.getElementById("hint");
+    const explanationDisplay = document.getElementById("explanation");
 
     // Get time spent from storage
     chrome.storage.local.get(["timeSpent"], (data) => {
         timerElement.textContent = `Time Spent: ${data.timeSpent || 0} mins`;
     });
 
-    // Fetch AI-generated hint
-    hintButton.addEventListener("click", async () => {
-        hintDisplay.textContent = "Fetching hint...";
+    const API_KEY = "AIzaSyCgwnIuHmWlUoip9-dmiCaEEMXsTFux3RI"; // Replace with your actual API key
 
-        const difficulty = difficultySelect.value;
-        const API_KEY = "AIzaSyCgwnIuHmWlUoip9-dmiCaEEMXsTFux3RI"; // Replace with your actual key
+    // Function to fetch AI response
+    async function fetchAIResponse(promptText, displayElement) {
+        displayElement.textContent = "Fetching response...";
 
         try {
             const response = await fetch(
@@ -23,21 +24,32 @@ document.addEventListener("DOMContentLoaded", async () => {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        prompt: { text: `Give a helpful hint for a ${difficulty} coding problem.` },
-                        max_tokens: 50,
+                        contents: [{ parts: [{ text: promptText }] }]
                     }),
                 }
             );
 
             const data = await response.json();
             if (data.candidates && data.candidates.length > 0) {
-                hintDisplay.textContent = data.candidates[0].output.trim();
+                displayElement.textContent = data.candidates[0].content.parts[0].text.trim();
             } else {
-                hintDisplay.textContent = "No hint available.";
+                displayElement.textContent = "No response available.";
             }
         } catch (error) {
-            console.error("Error fetching hint:", error);
-            hintDisplay.textContent = "Error fetching hint.";
+            console.error("Error fetching AI response:", error);
+            displayElement.textContent = "Error fetching response.";
         }
+    }
+
+    // Fetch AI-generated hint
+    hintButton.addEventListener("click", () => {
+        const difficulty = difficultySelect.value;
+        fetchAIResponse(`Give a helpful hint for a ${difficulty} coding problem.`, hintDisplay);
+    });
+
+    // Fetch AI-generated detailed explanation
+    explanationButton.addEventListener("click", () => {
+        const difficulty = difficultySelect.value;
+        fetchAIResponse(`Provide a detailed explanation for a ${difficulty} coding problem.`, explanationDisplay);
     });
 });

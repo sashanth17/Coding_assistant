@@ -1,8 +1,8 @@
 body {
-    width: 3500px;
+    width: 350px;
     font-family: 'Arial', sans-serif;
-    background: #f4f4f4;
-    padding: 1500px;
+    background: #03abdf;
+    padding: 150px;
     border-radius: 18px;
 }
 
@@ -12,14 +12,14 @@ h2 {
 
 button {
     width: 100%;
-    padding: 10px;
-    background: #007bff;
-    color: white;
+    padding: 50px;
+    background: #85878a;
+    color: rgb(5, 1, 255);
     border: none;
     border-radius: 6px;
     cursor: pointer;
 }
 
 button:hover {
-    background: #0056b3;
+    background: #f76403;
 }
