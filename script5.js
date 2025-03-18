@@ -1,3 +1,11 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const backbtn = document.getElementById("backbtn");
+
+    backbtn.addEventListener("click", function () {
+        window.location.href = "popup.html";  // ✅ Redirects safely
+    });
+});
+
 document.getElementById('send-btn').addEventListener('click', async function() {
     const userInput = document.getElementById('user-input').value;
     if (!userInput) return;

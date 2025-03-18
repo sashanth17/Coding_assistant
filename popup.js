@@ -26,8 +26,23 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         const explainBtn = document.getElementById("explainBtn");
-    
         explainBtn.addEventListener("click", function () {
             window.location.href = "page2.html";  // ✅ Redirects safely
         });
+
+        const approachbtn = document.getElementById("approachbtn");
+        approachbtn.addEventListener("click", function () {
+            window.location.href = "page3.html";  // ✅ Redirects safely
+        });
+
+        const solutionbtn = document.getElementById("solutionbtn");
+        solutionbtn.addEventListener("click", function () {
+            window.location.href = "page4.html";  // ✅ Redirects safely
+        });
+
+        const codebtn = document.getElementById("codebtn");
+        codebtn.addEventListener("click", function () {
+            window.location.href = "page5.html";  // ✅ Redirects safely
+        });
+
     });
