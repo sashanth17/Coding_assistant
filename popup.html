@@ -3,40 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Hint AI</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            width: 300px;
-            padding: 10px;
-        }
-        button {
-            margin-top: 10px;
-            padding: 5px;
-            width: 100%;
-            cursor: pointer;
-        }
-        select, p {
-            margin-top: 5px;
-        }
-    </style>
+    <title>Coding Assistant</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h3>Code Hint AI</h3>
-    <p id="timer">Time Spent: 0 mins</p>
-    
-    <label for="difficulty">Select Difficulty:</label>
-    <select id="difficulty">
-        <option value="Easy">Easy</option>
-        <option value="Medium">Medium</option>
-        <option value="Hard">Hard</option>
-    </select>
+    <div class="container">
+        <h1>Coding Assistant</h1>
+        <p class="tagline">"Code Smarter, Solve Faster - Your AI-Powered Coding Companion!" 🚀</p>
+         <!-- Timer -->
+         <div class="timer-container">
+            <h1 id="timer">00:00</h1>
+            <div class="buttons">
+                <button id="startPauseBtn">Start</button>
+                <button id="resetBtn">Reset</button>
+            </div>
+         </div>
 
-    <button id="getHint">Get AI Hint</button>
-    <p id="hint"></p>
-
-    <button id="getExplanation">Get Detailed Explanation</button>
-    <p id="explanation"></p>
+        <!-- Task List -->
+        <div class="task-list">
+            <div class="task" data-time="300">
+                <span>1. PROBLEM EXPLANATION</span>
+                <button class="btn">EXPLAIN</button>
+                <span class="unlock-info">UNLOCKS IN 5:00</span>
+            </div>
+            <div class="task" data-time="600">
+                <span>2. PROBLEM APPROACH</span>
+                <button class="btn">APPROACH</button>
+                <span class="unlock-info">UNLOCKS IN 10:00</span>
+            </div>
+            <div class="task" data-time="900">
+                <span>3. SOLUTION</span>
+                <button class="btn">SOLUTION</button>
+                <span class="unlock-info">UNLOCKS IN 15:00</span>
+            </div>
+            <div class="task" data-time="1200">
+                <span>4. CODE</span>
+                <button class="btn">CODE</button>
+                <span class="unlock-info">UNLOCKS IN 20:00</span>
+            </div>
+            <div class="task" data-time="1800">
+                <span>5. DEBUG</span>
+                <button class="btn">FINAL CODE</button>
+                <span class="unlock-info">UNLOCKS IN 30:00</span>
+            </div>
+        </div>
+    </div>
 
     <script src="popup.js"></script>
 </body>

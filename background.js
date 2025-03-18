@@ -1,9 +1,20 @@
 
+<<<<<<< HEAD
 // // Increment timer every minute
 // setInterval(() => {
 //     timeSpent++;
 //     chrome.storage.local.set({ timeSpent });
 // }, 60000);
+=======
+setInterval(() => {
+    timeSpent += 1;
+    chrome.storage.local.set({ timeSpent });
+<<<<<<< HEAD
+}, 60000); // Increments every 1 minute
+fy
+=======
+}, 60000);
+>>>>>>> 52d7de11ac4cdd5f28023733ac9b317054c041c3
 
 // // Reset timer when tab is changed
 // chrome.tabs.onActivated.addListener(() => {
@@ -77,9 +88,19 @@
 //     document.getElementById("explanation").textContent = explanation;
 // });
 
+<<<<<<< HEAD
 // // Timer function to track time spent
 // let timeSpent = 0;
 // setInterval(() => {
 //     timeSpent++;
 //     document.getElementById("timer").textContent = `Time Spent: ${timeSpent} mins`;
 // }, 60000); // Updates every 1 minute
+=======
+// Timer function to track time spent
+let timeSpent = 0;
+setInterval(() => {
+    timeSpent++;
+    document.getElementById("timer").textContent = `Time Spent: ${timeSpent} mins`;
+}, 60000); // Updates every 1 minute
+>>>>>>> 0b40bc40857d3633d79be29e81ff345c9c7c10c4
+>>>>>>> 52d7de11ac4cdd5f28023733ac9b317054c041c3
