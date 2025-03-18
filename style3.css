@@ -1,0 +1,175 @@
+/* General Styles */
+body {
+    background: linear-gradient(to bottom, #5e2a91, #c2167a);
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 300px; /* Adjust width for Chrome extension popup */
+    height: 450px; /* Adjust height */
+    overflow: hidden;
+    padding: 10px;
+}
+
+/* Main Container */
+.container {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Header */
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
+.back-btn {
+    background-color: #007BFF;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+}
+
+/* Title & Subtitle */
+h1 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.tagline {
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+/* Chat Container */
+.chat-container {
+    background-color: black;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+    max-height: 250px;
+    overflow-y: auto; /* Enable scrolling */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Chat Messages */
+.message {
+    padding: 8px;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 12px;
+}
+
+.bot {
+    background-color: gray;
+    text-align: left;
+    align-self: flex-start;
+}
+
+.user {
+    background-color: blue;
+    text-align: left;
+    align-self: flex-end;
+}
+
+/* Input Box */
+.input-container {
+    display: flex;
+    align-items: center;
+    background-color: gray;
+    padding: 8px;
+    border-radius: 8px;
+    width: 100%;
+}
+
+input {
+    flex-grow: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 12px;
+}
+
+#send-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+/* Confirm Button */
+.confirm-btn {
+    background-color: #32CD32;
+    color: black;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* Hover Unlock Info */
+.unlock-info {
+    display: none;
+    font-size: 10px;
+    position: absolute;
+    height: 100 px;
+    top: -15px;
+    right: 5px;
+    background: black;
+    padding: 3px 6px;
+    border-radius: 3px;
+}
+
+.task:hover .unlock-info {
+    display: inline;
+}
+
+/* Task List */
+.task-list {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.task {
+    background-color: #3a3a3a;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    position: relative;
+}
+
+.btn {
+    background-color: #4caf50;
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 350px) {
+    body {
+        width: 280px;
+    }
+}

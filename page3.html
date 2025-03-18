@@ -1,102 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem Explanation</title>
+    <link rel="stylesheet" href="style3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <style>
-        body {
-            background: linear-gradient(to right, #6a1b9a, #d81b60);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            width: 100%;
-            max-width: 300px;
-        }
-        .header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        .header button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .header h1 {
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            margin-left: 8px;
-        }
-        .card {
-            background: black;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-        .message-box {
-            background: gray;
-            color: white;
-            padding: 8px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-        }
-        .input-container {
-            display: flex;
-            align-items: center;
-            background: gray;
-            border-radius: 8px;
-            padding: 8px;
-        }
-        .input-container input {
-            background: gray;
-            color: white;
-            border: none;
-            outline: none;
-            flex-grow: 1;
-        }
-        .input-container button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .submit-button {
-            background: #66bb6a;
-            color: black;
-            font-weight: bold;
-            padding: 8px 16px;
-            border-radius: 999px;
-            border: none;
-            cursor: pointer;
-            display: block;
-            width: 100%;
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <button><i class="fas fa-arrow-left"></i></button>
-            <h1>DETAILED APPROACH</h1>
+            <button class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </button>
         </div>
-        <div class="card">
-            <div class="message-box">
-                Present Your Approach, and I’ll evaluate its Correctness
-            </div>
+        <h1 class="title">DETAILED APPROACH</h1>
+        <p class="subtitle">PROVIDE YOUR APPROACH</p>
+        
+        <div class="chat-container">
+            <div class="message bot">  Present Your Approach,and I’ll evaluate its Correctness</div>
+            <div id="chat-box"></div>
             <div class="input-container">
-                <input type="text" placeholder="message here">
-                <button><i class="fas fa-paper-plane"></i></button>
+                <input id="user-input" type="text" placeholder="Message Here">
+                <button id="send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </div>
         </div>
-        <button class="submit-button">GOT IT</button>
+
+        <button class="confirm-btn">GOT IT</button>
     </div>
+
+    <script src="script3.js"></script>
 </body>
 </html>
