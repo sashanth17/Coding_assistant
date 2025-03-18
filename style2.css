@@ -53,7 +53,7 @@ h1 {
     padding: 10px;
     margin-bottom: 15px;
     width: 100%;
-    max-height: 250px;
+    max-height: 350px;
     overflow-y: auto; /* Enable scrolling */
     display: flex;
     flex-direction: column;
@@ -88,7 +88,7 @@ h1 {
     background-color: gray;
     padding: 8px;
     border-radius: 8px;
-    width: 100%;
+    width: 90%;
 }
 
 input {
