@@ -1,20 +1,4 @@
 
-<<<<<<< HEAD
-// // Increment timer every minute
-// setInterval(() => {
-//     timeSpent++;
-//     chrome.storage.local.set({ timeSpent });
-// }, 60000);
-=======
-setInterval(() => {
-    timeSpent += 1;
-    chrome.storage.local.set({ timeSpent });
-<<<<<<< HEAD
-}, 60000); // Increments every 1 minute
-fy
-=======
-}, 60000);
->>>>>>> 52d7de11ac4cdd5f28023733ac9b317054c041c3
 
 // // Reset timer when tab is changed
 // chrome.tabs.onActivated.addListener(() => {
