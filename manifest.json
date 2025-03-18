@@ -4,12 +4,18 @@
   "version": "1.0",
   "description": "Provides AI-powered coding hints and problem explanations with a persistent timer.",
   "permissions": ["storage", "activeTab", "scripting", "alarms"],
-  "host_permissions": ["https://generativelanguage.googleapis.com/"],
+  "host_permissions": ["https://generativelanguage.googleapis.com/","<all_urls>"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon.png"
   },
   "background": {
     "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+  {
+    "resources": ["page2.html"],
+    "matches": ["<all_urls>"]
   }
+]
 }

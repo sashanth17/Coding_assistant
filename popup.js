@@ -24,6 +24,10 @@
     setInterval(fetchTimer, 1000);
     fetchTimer();
 
-    document.querySelector(".task .btn").addEventListener("click", function() {
-        window.location.href = "page2.html"; // Redirect to page2.html
+    document.addEventListener("DOMContentLoaded", function () {
+        const explainBtn = document.getElementById("explainBtn");
+    
+        explainBtn.addEventListener("click", function () {
+            window.location.href = "page2.html";  // ✅ Redirects safely
+        });
     });
