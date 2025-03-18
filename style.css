@@ -24,55 +24,9 @@ h1 {
 }
 
 /* Timer Styling */
-.timer-container {
-    display: flex;
-    justify-content: center;  /* Centers horizontally */
-    align-items: center;  
-    text-align: center;
-    background: white;
-    padding: 8px;
-    border-radius: 8px;
-    width: 90px; /* Slightly adjusted width */
-    height: 50px; /* Slightly adjusted height */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-h1 {
-    font-size: 18px; /* Reduced font size */
-    color: #3a3a3a;
-    margin: 0;
-}
-
-/* Centering buttons below the timer */
-.buttons {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-    margin-top: 5px;
-}
-
-button {
+.timerbuttons button {
     display: none;
-    padding: 5px 10px;
-    font-size: 8px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
 }
-
-#startPauseBtn {
-    background-color: #28a745;
-    color: white;
-}
-
-#resetBtn {
-    background-color: #dc3545;
-    color: white;
-}
-
 /* Task List */
 .task-list {
     text-align: left;
