@@ -70,7 +70,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
                     const botMessage = document.createElement('div');
                     botMessage.className = "message bot";
-                    botMessage.textContent = data.candidates[0].content.parts[0].text;
+                    const markdownText = data.candidates[0].content.parts[0].text;
+                    botMessage.innerHTML = marked.parse(markdownText); // ✅ Convert Markdown to HTML
                     chatBox.appendChild(botMessage);
                 } else {
                     console.error("Invalid response format:", data);

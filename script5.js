@@ -68,8 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         botMessage.className = "message bot";
                         const markdownText = data.candidates[0].content.parts[0].text;
                         botMessage.innerHTML = marked.parse(markdownText); // ✅ Convert Markdown to HTML
-
-chatBox.appendChild(botMessage);
+                        chatBox.appendChild(botMessage);
                     } else {
                         console.error("Invalid response format:", data);
                     }

@@ -58,7 +58,8 @@ document.getElementById('send-btn').addEventListener('click', async function() {
         if (data?.candidates?.length > 0) {
             const botMessage = document.createElement('div');
             botMessage.className = "message bot";
-            botMessage.textContent = data.candidates[0].content.parts[0].text;
+            const markdownText = data.candidates[0].content.parts[0].text;
+            botMessage.innerHTML = marked.parse(markdownText); // ✅ Convert Markdown to HTML
             chatBox.appendChild(botMessage);
         } else {
             console.error("Invalid response:", data);
