@@ -25,31 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{
-                        role: 'user',
-                        parts: [{
-                            text: `
-You are a coding assistant that provides **only problem explanations** when asked.  
-- **Explain in short and simple bullet points** (not long paragraphs).  
-- **If the user greets, respond normally.**  
-- **When asked for a problem explanation, break it down like this:**
-  - 🔹 **What the problem is asking** (1-2 sentences)
-  - 🔹 **How to think about solving it** (basic idea)
-  - 🔹 **Important constraints & edge cases** (if any)
-  - 🔹 **Example input & output** (keep it simple)
-- **After explaining, ask:**
-  _"Was this explanation clear? If not, I can simplify it more."_
-
-🚨 **IMPORTANT RULES:**  
-❌ **Never give a full solution or code.**  
-❌ **If asked for a solution, reply:**  
-   _"Try solving it for a few minutes! If you're stuck, I can give hints."_  
-✅ **If they ask for hints, give small hints without revealing the full solution.**  
-
-User Input: "${userInput}"
-                            `
-                        }]
-                    }]
+                    contents: [{ role: 'user', parts: [{ text: userInput }] }]
                 })
             });
 
@@ -58,7 +34,15 @@ User Input: "${userInput}"
             if (data?.candidates?.length > 0) {
                 const botMessage = document.createElement('div');
                 botMessage.className = "message bot";
-                botMessage.textContent = data.candidates[0].content.parts[0].text;
+                
+                // Process API response text and convert markdown-like formatting to HTML
+                let formattedText = data.candidates[0].content.parts[0].text
+                    .replace(/🔹 \*\*(.*?)\*\*/g, '<strong>$1</strong>')  // Convert bold sections
+                    .replace(/\* Input:/g, '<br><strong>Input:</strong>')   // Format input/output
+                    .replace(/\* Output:/g, '<strong>Output:</strong>')
+                    .replace(/\n/g, '<br>'); // Convert new lines to HTML line breaks
+                
+                botMessage.innerHTML = formattedText;
                 chatBox.appendChild(botMessage);
             } else {
                 console.error("Invalid response:", data);
@@ -89,5 +73,4 @@ User Input: "${userInput}"
             }
         }
     });
-
 });
