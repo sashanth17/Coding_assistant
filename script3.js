@@ -19,44 +19,60 @@ document.addEventListener("DOMContentLoaded", function () {
 
         document.getElementById('user-input').value = '';
 
-        // 🔥 STRONGER PROMPT
-        let prompt = `You are an AI coding assistant that **only provides explanations, hints, and guidance for solving coding problems**. 
-        **Follow these strict rules when responding**:
-        
-        1️⃣ **Wrong Approach:** If the user asks if an incorrect approach (e.g., "graph traversal" for an array problem) can be used, **say NO immediately** and give a very brief reason.
-        2️⃣ **Correct Approach:** If the user asks if a valid approach can be used, **confirm YES** and encourage them to try it out.
-        3️⃣ **User’s Own Approach:**
-            - If correct: ✅ "Yes, that works! Try implementing it."
-            - If incorrect: ❌ "No, that approach won't work because [brief reason]. Instead, try [correct approach]."
-        4️⃣ **User Has No Idea:** If the user says they don’t know how to approach the problem, **immediately give a small hint** without revealing the full solution.
-        5️⃣ **Stay on Topic:** Do NOT discuss anything outside the problem, and do NOT generate full code. Focus only on guiding the user toward solving the problem step by step.
-        6️⃣ **Be Direct:** Avoid unnecessary questions like "What do you think the nodes/edges represent?" unless it is absolutely necessary.
-
-        👉 Now, based on these rules, respond to this user query: "${userInput}"`;
-
-        try {
-            // Fetch response from Gemini API
-            const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyClpB5e0SFFAYNk8F-ObbkyGP200bYjKRs', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ role: 'user', parts: [{ text: prompt }] }]
-                })
-            });
-
-            const data = await response.json();
-
-            if (data?.candidates?.length > 0) {
-                const botMessage = document.createElement('div');
-                botMessage.className = "message bot";
-                botMessage.textContent = data.candidates[0].content.parts[0].text;
-                chatBox.appendChild(botMessage);
-            } else {
-                console.error("Invalid response:", data);
+        // 🔥 Retrieve Problem Statement from Chrome Storage
+        chrome.storage.local.get("problemStatement", async (data) => {
+            if (!data.problemStatement) {
+                const errorMessage = document.createElement('div');
+                errorMessage.className = "message bot";
+                errorMessage.textContent = "⚠️ Error: No problem statement found in storage.";
+                chatBox.appendChild(errorMessage);
+                return;
             }
 
-        } catch (error) {
-            console.error("Error fetching response:", error);
-        }
+            let problemStatement = data.problemStatement; // Store in variable
+            alert("Problem Statement Retrieved Successfully:\n" + problemStatement); // Alert message (optional)
+
+            // 🔥 STRONGER PROMPT
+            let prompt = `You are an AI coding assistant that **only provides explanations, hints, and guidance for solving coding problems**. 
+            **Follow these strict rules when responding**:
+            
+            1️⃣ **Wrong Approach:** If the user asks if an incorrect approach (e.g., "graph traversal" for an array problem) can be used, **say NO immediately** and give a very brief reason.
+            2️⃣ **Correct Approach:** If the user asks if a valid approach can be used, **confirm YES** and encourage them to try it out.
+            3️⃣ **User’s Own Approach:**
+                - If correct: ✅ "Yes, that works! Try implementing it."
+                - If incorrect: ❌ "No, that approach won't work because [brief reason]. Instead, try [correct approach]."
+            4️⃣ **User Has No Idea:** If the user says they don’t know how to approach the problem, **immediately give a small hint** without revealing the full solution.
+            5️⃣ **Stay on Topic:** Do NOT discuss anything outside the problem, and do NOT generate full code. Focus only on guiding the user toward solving the problem step by step.
+            6️⃣ **Be Direct:** Avoid unnecessary questions like "What do you think the nodes/edges represent?" unless it is absolutely necessary.
+
+            👉 **Problem Statement:** ${problemStatement}
+
+            👉 **User's Query:** "${userInput}"`;
+
+            try {
+                // Fetch response from Gemini API
+                const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyClpB5e0SFFAYNk8F-ObbkyGP200bYjKRs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ role: 'user', parts: [{ text: prompt }] }]
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    const botMessage = document.createElement('div');
+                    botMessage.className = "message bot";
+                    botMessage.textContent = data.candidates[0].content.parts[0].text;
+                    chatBox.appendChild(botMessage);
+                } else {
+                    console.error("Invalid response format:", data);
+                }
+
+            } catch (error) {
+                console.error("Error fetching response:", error);
+            }
+        });
     });
 });
