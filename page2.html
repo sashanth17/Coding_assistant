@@ -33,17 +33,5 @@
     </div>
 
     <script src="script2.js"></script>
-    <script>
-        // ✅ Feature: Auto-fill selected text into input box
-        document.addEventListener("mouseup", function () {
-            let selectedText = window.getSelection().toString().trim();
-            if (selectedText) {
-                let inputBox = document.querySelector("#user-input"); // Target input field
-                if (inputBox) {
-                    inputBox.value = selectedText; // Set the selected text
-                }
-            }
-        });
-    </script>
 </body>
 </html>
