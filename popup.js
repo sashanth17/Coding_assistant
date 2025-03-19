@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 pauseBtn.textContent = "Pause"; // Set text only after storage update
             });
         } else {
-            pauseBtn.textContent =  "pause";
+            pauseBtn.textContent = "Pause";
         }
     });
 
@@ -54,24 +54,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    const explainBtn = document.getElementById("explainBtn");
-    explainBtn.addEventListener("click", function () {
-        window.location.href = "page2.html";  // ✅ Redirects safely
-    });
+    document.getElementById("explainBtn").addEventListener("click", () => window.location.href = "page2.html");
+    document.getElementById("approachbtn").addEventListener("click", () => window.location.href = "page3.html");
+    document.getElementById("solutionbtn").addEventListener("click", () => window.location.href = "page4.html");
+    document.getElementById("codebtn").addEventListener("click", () => window.location.href = "page5.html");
 
-    const approachbtn = document.getElementById("approachbtn");
-    approachbtn.addEventListener("click", function () {
-        window.location.href = "page3.html";  // ✅ Redirects safely
+    // ✅ Feature: Move selected text to input box
+    document.addEventListener("mouseup", function () {
+        let selectedText = window.getSelection().toString().trim();
+        if (selectedText) {
+            let inputBox = document.querySelector("#messageInput"); // Get the input box
+            if (inputBox) {
+                inputBox.value = selectedText; // Set the selected text in input
+            }
+        }
     });
-
-    const solutionbtn = document.getElementById("solutionbtn");
-    solutionbtn.addEventListener("click", function () {
-        window.location.href = "page4.html";  // ✅ Redirects safely
-    });
-
-    const codebtn = document.getElementById("codebtn");
-    codebtn.addEventListener("click", function () {
-        window.location.href = "page5.html";  // ✅ Redirects safely
-    });
-
 });
