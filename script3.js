@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         document.getElementById('user-input').value = '';
 
-        // 🔥 Retrieve Problem Statement from Chrome Storage
+        // 🔥 Retrieve Problem Statement from Local Storage
         chrome.storage.local.get("problemStatement", async (data) => {
             if (!data.problemStatement) {
                 const errorMessage = document.createElement('div');
@@ -30,24 +30,30 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             let problemStatement = data.problemStatement; // Store in variable
-            alert("Problem Statement Retrieved Successfully:\n" + problemStatement); // Alert message (optional)
 
-            // 🔥 STRONGER PROMPT
-            let prompt = `You are an AI coding assistant that **only provides explanations, hints, and guidance for solving coding problems**. 
-            **Follow these strict rules when responding**:
-            
-            1️⃣ **Wrong Approach:** If the user asks if an incorrect approach (e.g., "graph traversal" for an array problem) can be used, **say NO immediately** and give a very brief reason.
-            2️⃣ **Correct Approach:** If the user asks if a valid approach can be used, **confirm YES** and encourage them to try it out.
-            3️⃣ **User’s Own Approach:**
-                - If correct: ✅ "Yes, that works! Try implementing it."
-                - If incorrect: ❌ "No, that approach won't work because [brief reason]. Instead, try [correct approach]."
-            4️⃣ **User Has No Idea:** If the user says they don’t know how to approach the problem, **immediately give a small hint** without revealing the full solution.
-            5️⃣ **Stay on Topic:** Do NOT discuss anything outside the problem, and do NOT generate full code. Focus only on guiding the user toward solving the problem step by step.
-            6️⃣ **Be Direct:** Avoid unnecessary questions like "What do you think the nodes/edges represent?" unless it is absolutely necessary.
+            // 🔥 Improved, Friendlier, & More Helpful Prompt
+            let prompt = `You are an AI coding mentor that **helps users refine their coding approaches**. Keep responses **short, friendly, and helpful**. **Follow these rules**:
 
-            👉 **Problem Statement:** ${problemStatement}
+            ✅ **If the approach is correct**:  
+               - Say **"Yes! That works. Try implementing it."**  
+               - Optionally suggest an **edge case** to check.
 
-            👉 **User's Query:** "${userInput}"`;
+            ⚠️ **If the approach is partially correct**:  
+               - Acknowledge it: **"You're on the right track!"**  
+               - Point out what needs improvement and **give a small hint**.
+
+            ❌ **If the approach is wrong**:  
+               - Say **"Not quite! The issue is [brief reason]."**  
+               - Suggest a **better approach** in one sentence.
+
+            🤔 **If the user is stuck**:  
+               - Give a **small hint**, not the full solution.
+
+            🔹 **If they ask for the technique name, tell them directly**.  
+               - Example: **"This is best solved using a greedy approach."**
+
+            👉 **Problem Statement:** ${problemStatement}  
+            👉 **User's Approach:** "${userInput}"`;
 
             try {
                 // Fetch response from Gemini API
