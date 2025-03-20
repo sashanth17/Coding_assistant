@@ -1,39 +1,53 @@
 document.addEventListener("DOMContentLoaded", function () {
     const backbtn = document.getElementById("backbtn");
-    const sendBtn = document.getElementById('send-btn');
-    const chatBox = document.getElementById('chat-box');
-    const userInputField = document.getElementById('user-input');
+    const sendBtn = document.getElementById("send-btn");
+    const chatBox = document.getElementById("chat-box");
+    const userInputField = document.getElementById("user-input");
 
     if (backbtn) {
         backbtn.addEventListener("click", function () {
-            window.location.href = "popup.html";  // ✅ Redirects safely
+            window.location.href = "popup.html"; // ✅ Redirect safely
         });
     }
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
         const userInput = userInputField.value.trim();
         if (!userInput) return;
 
         // Display user message
-        const userMessage = document.createElement('div');
+        const userMessage = document.createElement("div");
         userMessage.className = "message user";
         userMessage.textContent = userInput;
         chatBox.appendChild(userMessage);
-        userInputField.value = '';
+        userInputField.value = "";
 
-        // 🔥 Retrieve Code from Local Storage
-        chrome.storage.local.get("userCode", function (data) {
-            if (!data.userCode) {
-                const errorMessage = document.createElement('div');
+        // 🔥 Step 1: Get the active tab's URL
+        async function getActiveTabUrl() {
+            return new Promise((resolve) => {
+                chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                    resolve(tabs[0].url); // ✅ Return active tab's URL
+                });
+            });
+        }
+
+        let tabUrl = await getActiveTabUrl();
+        let codeKey = tabUrl + "_Code"; // ✅ Use a new variable instead of modifying tabUrl
+        console.log("Active Tab URL:", tabUrl);
+        console.log("Code Key Used for Storage:", codeKey); // Debugging
+
+        // 🔥 Step 2: Retrieve stored code from local storage using the correct key
+        chrome.storage.local.get([codeKey], async (data) => {
+            if (!data[codeKey]) { // ✅ If no data found, show an error
+                const errorMessage = document.createElement("div");
                 errorMessage.className = "message bot";
-                errorMessage.textContent = "⚠️ Error: No code found in storage.";
+                errorMessage.textContent = "⚠️ Error: No stored code found for this page.";
                 chatBox.appendChild(errorMessage);
                 return;
             }
 
-            let userCode = data.userCode; // Store in variable
+            let storedCode = data[codeKey]; // ✅ Retrieve stored code
 
-            // 🔥 Improved, Friendlier, & More Helpful Prompt
+            // 🔥 Step 3: Build the AI prompt
             let prompt = `You are an AI coding mentor that **helps users refine their code**. Keep responses **short, friendly, and helpful**. **Follow these rules strictly**:
 
 🔹 **If there are syntax errors**:  
@@ -50,41 +64,52 @@ document.addEventListener("DOMContentLoaded", function () {
    - Give a **small hint** on how to proceed, but **do NOT write the solution**.  
    - Example: **"Think about using a hash map to optimize lookups."**  
 
-👉 **Problem Statement:** ${userCode}  
+👉 **Stored Code:** ${storedCode}  
 👉 **User's Code:** "${userInput}"`;
 
-            // 🔥 Fetch response from Gemini API
-            fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyClpB5e0SFFAYNk8F-ObbkyGP200bYjKRs', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ role: 'user', parts: [{ text: prompt }] }]
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
-                    const botMessage = document.createElement('div');
-                    botMessage.className = "message bot";
-                    const markdownText = data.candidates[0].content.parts[0].text;
-                    botMessage.innerHTML = marked.parse(markdownText); // ✅ Convert Markdown to HTML
-                    chatBox.appendChild(botMessage);
-                } else {
-                    console.error("Invalid response format:", data);
+            // 🔥 Step 4: Fetch response from Gemini API
+            fetch(
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyClpB5e0SFFAYNk8F-ObbkyGP200bYjKRs",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ role: "user", parts: [{ text: prompt }] }]
+                    })
                 }
-            })
-            .catch(error => console.error("Error fetching response:", error));
+            )
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        const botMessage = document.createElement("div");
+                        botMessage.className = "message bot";
+                        const markdownText = data.candidates[0].content.parts[0].text;
+
+                        // ✅ Ensure `marked` is loaded before using it
+                        if (typeof marked !== "undefined") {
+                            botMessage.innerHTML = marked.parse(markdownText);
+                        } else {
+                            console.error("marked.js is not loaded.");
+                            botMessage.textContent = markdownText; // Fallback to plain text
+                        }
+
+                        chatBox.appendChild(botMessage);
+                    } else {
+                        console.error("Invalid response format:", data);
+                    }
+                })
+                .catch((error) => console.error("Error fetching response:", error));
         });
     };
 
     // Click event for send button
     if (sendBtn) {
-        sendBtn.addEventListener('click', sendMessage);
+        sendBtn.addEventListener("click", sendMessage);
     }
 
     // Enter key event for input field
     if (userInputField) {
-        userInputField.addEventListener('keypress', function (event) {
+        userInputField.addEventListener("keypress", function (event) {
             if (event.key === "Enter") {
                 event.preventDefault(); // Prevents form submission or new line
                 sendMessage();

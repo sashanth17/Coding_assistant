@@ -1,37 +1,51 @@
 document.addEventListener("DOMContentLoaded", function () {
     const backbtn = document.getElementById("backbtn");
 
-    backbtn.addEventListener("click", function () {
-        window.location.href = "popup.html";  // ✅ Redirects safely
-    });
+    if (backbtn) {
+        backbtn.addEventListener("click", function () {
+            window.location.href = "popup.html"; // ✅ Redirect safely
+        });
+    }
 
     const sendMessage = async () => {
-        const userInput = document.getElementById('user-input').value.trim();
+        const userInput = document.getElementById("user-input").value.trim();
         if (!userInput) return;
 
-        const chatBox = document.getElementById('chat-box');
+        const chatBox = document.getElementById("chat-box");
 
         // Display user message
-        const userMessage = document.createElement('div');
+        const userMessage = document.createElement("div");
         userMessage.className = "message user";
         userMessage.textContent = userInput;
         chatBox.appendChild(userMessage);
 
-        document.getElementById('user-input').value = '';
+        document.getElementById("user-input").value = "";
 
-        // 🔥 Retrieve Problem Statement from Local Storage
-        chrome.storage.local.get("problemStatement", async (data) => {
-            if (!data.problemStatement) {
-                const errorMessage = document.createElement('div');
+        // 🔥 Step 1: Get the active tab's URL
+        async function getActiveTabUrl() {
+            return new Promise((resolve) => {
+                chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                    resolve(tabs[0].url); // ✅ Return active tab's URL
+                });
+            });
+        }
+
+        let tabUrl = await getActiveTabUrl();
+        console.log("Active Tab URL:", tabUrl); // Debugging
+
+        // 🔥 Step 2: Retrieve the problem statement from local storage
+        chrome.storage.local.get([tabUrl], async (data) => { // ✅ Use tab URL as storage key
+            if (!data[tabUrl]) { // ✅ If no data found, show an error
+                const errorMessage = document.createElement("div");
                 errorMessage.className = "message bot";
-                errorMessage.textContent = "⚠️ Error: No problem statement found in storage.";
+                errorMessage.textContent = "⚠️ Error: No problem statement found for this page.";
                 chatBox.appendChild(errorMessage);
                 return;
             }
 
-            let problemStatement = data.problemStatement; // Store in variable
+            let problemStatement = data[tabUrl]; // ✅ Retrieve the problem statement
 
-            // 🔥 Improved, Friendlier, & More Helpful Prompt
+            // 🔥 Step 3: Build the AI prompt
             let prompt = `You are an AI coding mentor that **helps users refine their coding approaches**. Keep responses **short, friendly, and helpful**. **Follow these rules**:
 
             ✅ **If the approach is correct**:  
@@ -56,27 +70,37 @@ document.addEventListener("DOMContentLoaded", function () {
             👉 **User's Approach:** "${userInput}"`;
 
             try {
-                // Fetch response from Gemini API
-                const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyClpB5e0SFFAYNk8F-ObbkyGP200bYjKRs', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ role: 'user', parts: [{ text: prompt }] }]
-                    })
-                });
+                // 🔥 Step 4: Fetch response from Gemini API
+                const response = await fetch(
+                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyClpB5e0SFFAYNk8F-ObbkyGP200bYjKRs",
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            contents: [{ role: "user", parts: [{ text: prompt }] }]
+                        })
+                    }
+                );
 
                 const data = await response.json();
 
                 if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
-                    const botMessage = document.createElement('div');
+                    const botMessage = document.createElement("div");
                     botMessage.className = "message bot";
                     const markdownText = data.candidates[0].content.parts[0].text;
-                    botMessage.innerHTML = marked.parse(markdownText); // ✅ Convert Markdown to HTML
+
+                    // ✅ Ensure `marked` is loaded before using it
+                    if (typeof marked !== "undefined") {
+                        botMessage.innerHTML = marked.parse(markdownText);
+                    } else {
+                        console.error("marked.js is not loaded.");
+                        botMessage.textContent = markdownText; // Fallback to plain text
+                    }
+
                     chatBox.appendChild(botMessage);
                 } else {
                     console.error("Invalid response format:", data);
                 }
-
             } catch (error) {
                 console.error("Error fetching response:", error);
             }
@@ -84,13 +108,19 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     // Click event for send button
-    document.getElementById('send-btn').addEventListener('click', sendMessage);
+    const sendButton = document.getElementById("send-btn");
+    if (sendButton) {
+        sendButton.addEventListener("click", sendMessage);
+    }
 
     // Enter key event for input field
-    document.getElementById('user-input').addEventListener('keypress', function (event) {
-        if (event.key === "Enter") {
-            event.preventDefault(); // Prevents form submission or new line
-            sendMessage();
-        }
-    });
+    const userInputField = document.getElementById("user-input");
+    if (userInputField) {
+        userInputField.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevents form submission or new line
+                sendMessage();
+            }
+        });
+    }
 });
