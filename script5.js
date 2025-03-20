@@ -10,6 +10,42 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Function to get the API Key (if missing, prompt the user)
+    async function getAPIKey() {
+        return new Promise((resolve) => {
+            chrome.storage.local.get(["userAPIKey"], function (result) {
+                if (result["userAPIKey"]) {
+                    resolve(result["userAPIKey"]);
+                } else {
+                    let apiKey = prompt("Enter your API Key:");
+                    if (apiKey) {
+                        chrome.storage.local.set({ "userAPIKey": apiKey }, function () {
+                            console.log("API Key stored successfully.");
+                        });
+                        resolve(apiKey);
+                    } else {
+                        console.log("No API Key entered.");
+                        resolve(null);
+                    }
+                }
+            });
+        });
+    }
+
+    // Function to get the active tab's URL
+    async function getActiveTabUrl() {
+        return new Promise((resolve) => {
+            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                if (tabs.length > 0) {
+                    resolve(tabs[0].url); // ✅ Return active tab's URL
+                } else {
+                    resolve(null);
+                }
+            });
+        });
+    }
+
+    // Function to send user input and retrieve stored code
     const sendMessage = async () => {
         const userInput = userInputField.value.trim();
         if (!userInput) return;
@@ -21,23 +57,17 @@ document.addEventListener("DOMContentLoaded", function () {
         chatBox.appendChild(userMessage);
         userInputField.value = "";
 
-        // 🔥 Step 1: Get the active tab's URL
-        async function getActiveTabUrl() {
-            return new Promise((resolve) => {
-                chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-                    resolve(tabs[0].url); // ✅ Return active tab's URL
-                });
-            });
+        let tabUrl = await getActiveTabUrl();
+        if (!tabUrl) {
+            alert("❌ Error: Unable to get the active tab URL.");
+            return;
         }
 
-        let tabUrl = await getActiveTabUrl();
-        let codeKey = tabUrl + "_Code"; // ✅ Use a new variable instead of modifying tabUrl
-        console.log("Active Tab URL:", tabUrl);
-        console.log("Code Key Used for Storage:", codeKey); // Debugging
+        let codeKey = tabUrl + "_Code"; // ✅ Append "_Code" for retrieval key
 
-        // 🔥 Step 2: Retrieve stored code from local storage using the correct key
+        // 🔥 Retrieve stored code from local storage
         chrome.storage.local.get([codeKey], async (data) => {
-            if (!data[codeKey]) { // ✅ If no data found, show an error
+            if (!data[codeKey]) {
                 const errorMessage = document.createElement("div");
                 errorMessage.className = "message bot";
                 errorMessage.textContent = "⚠️ Error: No stored code found for this page.";
@@ -45,10 +75,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            let storedCode = data[codeKey]; // ✅ Retrieve stored code
+            let storedCode = data[codeKey];
 
-            // 🔥 Step 3: Build the AI prompt
-            let prompt = `You are an AI coding mentor that **helps users refine their code**. Keep responses **short, friendly, and helpful**. **Follow these rules strictly**:
+            let apiKey = await getAPIKey(); // ✅ Retrieve API Key from storage
+            if (!apiKey) {
+                alert("⚠️ API Key is required to proceed.");
+                return;
+            }
+
+            // 🔥 Construct AI Prompt
+            let prompt = `
+You are an AI coding mentor that **helps users refine their code**. Keep responses **short, friendly, and helpful**. **Follow these rules strictly**:
 
 🔹 **If there are syntax errors**:  
    - Mention them clearly and **suggest a fix**, but do **not rewrite the code**.  
@@ -65,40 +102,44 @@ document.addEventListener("DOMContentLoaded", function () {
    - Example: **"Think about using a hash map to optimize lookups."**  
 
 👉 **Stored Code:** ${storedCode}  
-👉 **User's Code:** "${userInput}"`;
+👉 **User's Code:** "${userInput}"
+`;
 
-            // 🔥 Step 4: Fetch response from Gemini API
-            fetch(
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyClpB5e0SFFAYNk8F-ObbkyGP200bYjKRs",
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        contents: [{ role: "user", parts: [{ text: prompt }] }]
-                    })
-                }
-            )
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
-                        const botMessage = document.createElement("div");
-                        botMessage.className = "message bot";
-                        const markdownText = data.candidates[0].content.parts[0].text;
-
-                        // ✅ Ensure `marked` is loaded before using it
-                        if (typeof marked !== "undefined") {
-                            botMessage.innerHTML = marked.parse(markdownText);
-                        } else {
-                            console.error("marked.js is not loaded.");
-                            botMessage.textContent = markdownText; // Fallback to plain text
-                        }
-
-                        chatBox.appendChild(botMessage);
-                    } else {
-                        console.error("Invalid response format:", data);
+            try {
+                // 🔥 Fetch response from Gemini API
+                const response = await fetch(
+                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            contents: [{ role: "user", parts: [{ text: prompt }] }]
+                        })
                     }
-                })
-                .catch((error) => console.error("Error fetching response:", error));
+                );
+
+                const data = await response.json();
+
+                if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    const botMessage = document.createElement("div");
+                    botMessage.className = "message bot";
+                    const markdownText = data.candidates[0].content.parts[0].text;
+
+                    // ✅ Ensure `marked` is loaded before using it
+                    if (typeof marked !== "undefined") {
+                        botMessage.innerHTML = marked.parse(markdownText);
+                    } else {
+                        console.error("marked.js is not loaded.");
+                        botMessage.textContent = markdownText; // Fallback to plain text
+                    }
+
+                    chatBox.appendChild(botMessage);
+                } else {
+                    console.error("Invalid response format:", data);
+                }
+            } catch (error) {
+                console.error("Error fetching response:", error);
+            }
         });
     };
 

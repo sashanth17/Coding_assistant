@@ -21,25 +21,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
         document.getElementById('user-input').value = '';
 
+        // Function to get the active tab's URL
         async function getActiveTabUrl() {
             return new Promise((resolve) => {
                 chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-                    resolve(tabs[0].url); // ✅ Return active tab's URL
+                    if (tabs.length > 0) {
+                        resolve(tabs[0].url); // ✅ Return active tab's URL
+                    } else {
+                        resolve(null);
+                    }
                 });
             });
         }
 
         let prob = await getActiveTabUrl();
 
+        if (!prob) {
+            alert("Unable to get active tab URL.");
+            return;
+        }
 
-        // Retrieve the stored problem statement
-        chrome.storage.local.get([prob], async (data) => { // ✅ Correct key usage
-            if (!data[prob]) { // ✅ Correct way to check stored data
+        // Retrieve the stored problem statement using the active tab's URL as a key
+        chrome.storage.local.get([prob], async (data) => {
+            if (!data[prob]) {
                 alert("No problem statement found in storage.");
                 return;
             }
 
-            let problemInput = data[prob]; // ✅ Correct variable assignment
+            let problemInput = data[prob];
 
             try {
                 const response = await fetch(
