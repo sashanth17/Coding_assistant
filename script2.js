@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         let prob = await getActiveTabUrl();
-        alert(prob); // Debugging
+
 
         // Retrieve the stored problem statement
         chrome.storage.local.get([prob], async (data) => { // ✅ Correct key usage
