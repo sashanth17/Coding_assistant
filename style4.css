@@ -74,6 +74,37 @@ h1 {
     background-color: gray;
     text-align: left;
     align-self: flex-start;
+    padding: 5px; /* Reduced padding */
+    margin-bottom: 5px; /* Reduced spacing between messages */
+    font-size: 12px; /* Keep text small */
+    line-height: 1.2; /* Reduce line spacing */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align text to the left */
+}
+
+/* Reduce padding/margin for Markdown elements inside bot messages */
+.bot p,
+.bot ul,
+.bot li,
+.bot pre {
+    margin: 2px 0; /* Reduce spacing */
+    padding: 0px; /* Remove extra padding */
+    text-align: left; /* Ensure left alignment */
+}
+
+/* Code block styling (if Markdown uses <pre>) */
+.bot pre {
+    padding: 2px; /* Reduce padding */
+    background-color: #333; /* Dark background for readability */
+    border-radius: 5px;
+    white-space: pre-wrap; /* Wrap long lines */
+    word-break: break-word;
+}
+
+/* Ensure list items align properly */
+.bot ul {
+    padding-left: 15px; /* Adjust bullet alignment */
 }
 
 .user {
