@@ -1,13 +1,16 @@
+
 function saveProblemStatement() {
     // Select the problem container
     const problemContainer = document.querySelector('div.elfjS');
 
+    const currentPageUrl = window.location.href;
+    alert("Page URL stored:"+currentPageUrl);
     if (problemContainer) {
         // Extract text from all elements inside the container
         const problemText = problemContainer.innerText.trim();
 
         // Store in Chrome local storage
-        chrome.storage.local.set({ problemStatement: problemText }, () => {
+        chrome.storage.local.set({ [currentPageUrl]: problemText }, () => {
             console.log("Problem statement saved:", problemText);
         });
     } else {
