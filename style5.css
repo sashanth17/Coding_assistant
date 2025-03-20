@@ -1,6 +1,7 @@
 /* General Styles */
 body {
-    background: linear-gradient(to bottom, #5e2a91, #c2167a);
+    background: linear-gradient(to bottom, #252525, #1a1a1a);
+    border: 1px solid rgb(54, 170, 54);
     color: white;
     font-family: Arial, sans-serif;
     text-align: center;
@@ -27,7 +28,7 @@ body {
 }
 
 #backbtn {
-    background-color: #007BFF;
+    background-color: #3ac162;
     border: none;
     padding: 8px;
     border-radius: 50%;
@@ -107,7 +108,7 @@ h1 {
 }
 
 .user {
-    background-color: blue;
+    background-color: #3ac162;
     text-align: left;
     align-self: flex-end;
 }

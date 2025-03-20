@@ -1,6 +1,7 @@
 /* General Styles */
 body {
-    background: linear-gradient(to bottom, #5e2a91, #c2167a);
+    background: linear-gradient(to bottom, #252525, #1a1a1a);
+    border: 1px solid rgb(54, 170, 54);
     color: white;
     font-family: Arial, sans-serif;
     text-align: center;

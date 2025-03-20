@@ -51,7 +51,21 @@ document.addEventListener("DOMContentLoaded", function () {
                             contents: [{
                                 role: 'user',
                                 parts: [{
-                                    text: `The user is solving the following problem:\n\n${problemInput}\n\nUser's understanding of the problem:\n\n${userInput}\n\nTask:\n- Analyze the user's input:\n  - If the statement is **meaningless**, ignore it and do **not** respond.\n  - If the user's understanding is **irrelevant** to the problem, tell them to "reread the problem statement" and stop there—no explanation.\n- If the understanding is relevant:\n  - Pinpoint any **mistakes or gaps** in their reasoning.\n  - Give a **short, precise** correction.\n  - Suggest **concise** steps to improve.\n\nImportant Guidelines:\n- Limit responses to **3-4 bullet points** max—keep it brief.\n- Focus on **actionable feedback**, no long explanations.\n- **Never** give the full solution.\n- Ignore **unrelated or off-topic** questions.\n- Speak **directly** to the user (e.g., "You missed this...").\n- Push the user to **think critically** and figure it out themselves.\nRespond like you are directly interacting with the user (e.g., "Your explanation...", "Your response...")`
+                                    text: `The user is solving this coding problem:\n
+                                    \n${problemInput}\n\nUser's understanding of the problem:\n\n${userInput}\n\n
+                                    Task:\n- Review the user's input:\n
+                                    
+                                    If it’s vague or meaningless, skip it and don’t respond.\n
+                                    If it’s unrelated to the problem, say "Reread the problem statement" and stop.\n
+                                    If it’s relevant:\n - Spot any errors or gaps in their logic.\n
+                                    Offer a short, clear correction.\n - Recommend brief, practical steps to improve.\n\n Guidelines:\n
+                                    Keep responses to 3-4 bullet points max—short and sweet.\n
+                                    Provide actionable tips, no lengthy explanations.\n
+                                    Don’t solve the problem fully—let the user figure it out.\n
+                                    If asked for the full solution, say "I can’t give the full answer—try breaking it down yourself!" and stop.\n
+                                    Ignore off-topic comments.\n
+                                    Talk directly to the user (e.g., "You’re missing...", "Try this...").\n
+                                    Encourage critical thinking to boost problem-solving skills.\n Respond as if chatting with the user (e.g., "Your take...", "You got this...").`
                                 }]
                             }]
                         })
