@@ -72,6 +72,7 @@ h1 {
 
 .bot {
     background-color: gray;
+    padding: 5px;
     text-align: left;
     align-self: flex-start;
 }
@@ -146,7 +147,7 @@ input {
 }
 
 .message {
-    padding: 10px;
+    padding: 5px;
     margin: 5px;
     border-radius: 5px;
     max-width: 80%;
@@ -163,6 +164,7 @@ input {
 .bot {
     background-color: #f1f1f1;
     color: black;
+    padding: 5px;
     align-self: flex-start;
     text-align: left;
 }

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "popup.html";  // ✅ Redirects safely
     });
 
-    document.getElementById('send-btn').addEventListener('click', async function() {
+    const sendMessage = async () => {
         const userInput = document.getElementById('user-input').value.trim();
         if (!userInput) return;
 
@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             let problemInput = data.problemStatement; // Store in variable
-            alert("Problem Statement Retrieved Successfully:\n" + problemInput); // Alert message
 
             try {
                 // Fetch response from Gemini API
@@ -60,6 +59,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error("Error fetching response:", error);
             }
         });
+    };
+
+    // Click event for send button
+    document.getElementById('send-btn').addEventListener('click', sendMessage);
+
+    // Enter key event for input field
+    document.getElementById('user-input').addEventListener('keypress', function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); // Prevents form submission or new line
+            sendMessage();
+        }
     });
 });
-
